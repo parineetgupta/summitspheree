@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  
+  /* SummitSphere Color Palette */
+  --color-primary-50: #f0f9ff;
+  --color-primary-500: #0ea5e9;
+  --color-primary-900: #0c4a6e;
+  
+  --color-dark-900: #050505;
+  --color-dark-800: #111111;
+  --color-dark-700: #1a1a1a;
+  
+  --color-accent-gold: #fbbf24;
+
+  --animate-shimmer: shimmer 2s infinite;
+  
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-gray-200 dark:border-gray-800;
+  }
+  body {
+    @apply bg-dark-900 text-gray-100 antialiased;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+/* Liquid Glass Utilities */
+@layer utilities {
+  .liquid-glass {
+    @apply bg-white/5 border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  }
+  
+  .liquid-glass-border {
+    position: relative;
+  }
+  
+  .liquid-glass-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.05) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
