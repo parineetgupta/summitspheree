@@ -92,14 +92,14 @@ export function JourneyAscents({ expeditions }: { expeditions: Expedition[] }) {
         <div className="ascents-timeline-line w-full bg-gradient-to-b from-[#00D084] via-white/10 to-[#00D084] h-0 shadow-[0_0_15px_rgba(0,208,132,0.3)]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-8 relative z-10 flex flex-col gap-40">
+      <div className="max-w-7xl mx-auto px-6 md:px-8 relative z-10 flex flex-col gap-20 md:gap-40">
         
         {/* Chapter Header */}
-        <div className="text-center chapter-title-ii bg-[#050505] inline-block px-12 py-8 relative left-1/2 -translate-x-1/2 border border-white/5 rounded-full backdrop-blur-md">
-          <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-4">
+        <div className="text-center chapter-title-ii bg-[#050505] inline-block px-8 md:px-12 py-6 md:py-8 relative left-1/2 -translate-x-1/2 border border-white/5 rounded-full backdrop-blur-md">
+          <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-3 md:mb-4">
             Chapter II
           </p>
-          <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tighter font-light mb-4">
+          <h2 className="text-3xl md:text-5xl font-serif text-white tracking-tighter font-light mb-3 md:mb-4">
             The Ascents
           </h2>
           <p className="text-[9px] tracking-[0.2em] uppercase text-[#6b7280]">
@@ -114,7 +114,7 @@ export function JourneyAscents({ expeditions }: { expeditions: Expedition[] }) {
           const isEven = index % 2 === 0; 
           
           return (
-            <div key={exp.id} className={`ascent-chapter flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-16 lg:gap-32 items-center`}>
+            <div key={exp.id} className={`ascent-chapter flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 md:gap-16 lg:gap-32 items-center`}>
               
               {/* Image Block */}
               <div className="w-full lg:w-[45%]">
@@ -131,7 +131,7 @@ export function JourneyAscents({ expeditions }: { expeditions: Expedition[] }) {
                     </div>
                   )}
                   {/* Glassmorphic Date Badge */}
-                  <div className="absolute top-6 left-6 px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 text-[9px] tracking-[0.2em] uppercase text-white/80">
+                  <div className="absolute top-4 left-4 md:top-6 md:left-6 px-3 md:px-4 py-1.5 md:py-2 bg-black/40 backdrop-blur-md border border-white/10 text-[8px] md:text-[9px] tracking-[0.2em] uppercase text-white/80">
                     {formatDate(exp.date || "")}
                   </div>
                 </div>
@@ -139,13 +139,13 @@ export function JourneyAscents({ expeditions }: { expeditions: Expedition[] }) {
 
               {/* Editorial Text Block */}
               <div className="w-full lg:w-[45%] flex flex-col items-start bg-[#050505]">
-                <h3 className="text-5xl md:text-7xl font-serif tracking-tighter italic font-light mb-8 text-white leading-tight">
+                <h3 className="text-4xl md:text-5xl lg:text-7xl font-serif tracking-tighter italic font-light mb-6 md:mb-8 text-white leading-tight">
                   {exp.title}
                 </h3>
                 
-                <div className="w-full h-px bg-white/10 mb-8" />
+                <div className="w-full h-px bg-white/10 mb-6 md:mb-8" />
                 
-                <div className="grid grid-cols-2 gap-x-12 gap-y-6 mb-12 w-full">
+                <div className="grid grid-cols-2 gap-x-6 md:gap-x-12 gap-y-4 md:gap-y-6 mb-8 md:mb-12 w-full">
                   <div>
                     <p className="text-[8px] tracking-[0.3em] uppercase text-[#6b7280] mb-2 font-semibold">Location</p>
                     <p className="text-xs font-sans text-white/90 uppercase tracking-widest">{exp.location}</p>

@@ -14,6 +14,7 @@ import { JourneyAscents } from "@/components/journey/JourneyAscents";
 import { JourneyAtlas } from "@/components/journey/JourneyAtlas";
 import { JourneyAchievements } from "@/components/journey/JourneyAchievements";
 import { JourneyQuote } from "@/components/journey/JourneyQuote";
+import { Footer } from "@/components/layout/Footer";
 
 export default function PublicJourneyPage({ params }: { params: Promise<{ username: string }> }) {
   const resolvedParams = use(params);
@@ -221,6 +222,7 @@ export default function PublicJourneyPage({ params }: { params: Promise<{ userna
           </div>
         )}
         <JourneyQuote />
+        <Footer />
       </div>
 
       {/* SHARE MODAL */}

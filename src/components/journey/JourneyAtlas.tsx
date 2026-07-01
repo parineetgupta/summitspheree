@@ -69,14 +69,14 @@ export function JourneyAtlas({ expeditions }: { expeditions: Expedition[] }) {
         <div className="atlas-timeline-line w-full bg-gradient-to-b from-[#00D084] via-white/10 to-[#00D084] h-0 shadow-[0_0_15px_rgba(0,208,132,0.3)]" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-8 relative z-10 flex flex-col gap-32">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 relative z-10 flex flex-col gap-20 md:gap-32">
         
         {/* Chapter Header */}
-        <div className="text-center chapter-title-iii bg-[#050505] inline-block px-12 py-8 relative left-1/2 -translate-x-1/2 border border-white/5 rounded-full backdrop-blur-md">
-          <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-4">
+        <div className="text-center chapter-title-iii bg-[#050505] inline-block px-8 md:px-12 py-6 md:py-8 relative left-1/2 -translate-x-1/2 border border-white/5 rounded-full backdrop-blur-md">
+          <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-3 md:mb-4">
             Chapter III
           </p>
-          <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tighter font-light mb-4">
+          <h2 className="text-3xl md:text-5xl font-serif text-white tracking-tighter font-light mb-3 md:mb-4">
             The Atlas
           </h2>
           <p className="text-[9px] tracking-[0.2em] uppercase text-[#6b7280]">
@@ -84,7 +84,7 @@ export function JourneyAtlas({ expeditions }: { expeditions: Expedition[] }) {
           </p>
         </div>
 
-        <div className="atlas-grid grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+        <div className="atlas-grid grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 relative z-10">
           {futureTreks.length === 0 ? (
             <div className="col-span-full py-12 text-center border border-white/10 bg-white/5 backdrop-blur-md">
               <p className="text-[10px] tracking-[0.4em] uppercase text-white/50">No Future Tracks Available</p>
@@ -96,7 +96,7 @@ export function JourneyAtlas({ expeditions }: { expeditions: Expedition[] }) {
               const coverImage = trek.heroImage || (mediaImages.length > 0 ? mediaImages[0].url : null);
               
               return (
-                <div key={trek.id} className="atlas-card group flex flex-col justify-between p-12 bg-white/[0.01] border border-white/5 hover:border-white/20 transition-all duration-700 relative overflow-hidden backdrop-blur-sm">
+                <div key={trek.id} className="atlas-card group flex flex-col justify-between p-8 md:p-12 bg-white/[0.01] border border-white/5 hover:border-white/20 transition-all duration-700 relative overflow-hidden backdrop-blur-sm">
                   
                   {/* Background Image & Overlay */}
                   <div className="absolute inset-0 z-0">

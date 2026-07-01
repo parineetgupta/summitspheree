@@ -83,7 +83,7 @@ export function JourneyIntro({
 
       {/* Main Content */}
       <div className="hero-content relative z-20 flex flex-col items-center text-center px-4 w-full max-w-4xl">
-        <h1 className="hero-element text-6xl md:text-8xl lg:text-[140px] font-serif text-white tracking-tighter font-light leading-none mb-12 uppercase mix-blend-difference">
+        <h1 className="hero-element text-5xl sm:text-6xl md:text-8xl lg:text-[140px] font-serif text-white tracking-tighter font-light leading-none mb-12 uppercase mix-blend-difference">
           Relive<br />
           <span className="italic opacity-90">The Journey</span>
         </h1>

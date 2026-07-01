@@ -27,12 +27,12 @@ export default function AdminOverview() {
   const totalElevation = completedTreks.reduce((sum, e) => sum + (Number(e.elevation) || 0), 0);
   const highestPeak = completedTreks.reduce((max, e) => Math.max(max, Number(e.elevation) || 0), 0);
 
-  if (loading) return <div className="p-8 max-w-7xl mx-auto font-sans">Loading dashboard...</div>;
+  if (loading) return <div className="p-4 sm:p-8 max-w-7xl mx-auto font-sans">Loading dashboard...</div>;
 
   return (
-    <div className="p-8 max-w-7xl mx-auto font-sans">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto font-sans">
       
-      <div className="flex justify-between items-end mb-12">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-end mb-8 sm:mb-12 gap-4">
         <div>
           <h2 className="text-sm font-bold text-white mb-2 tracking-widest uppercase">Dashboard Overview</h2>
           <p className="text-[10px] tracking-widest uppercase text-white/50">Track your progress and look back at your outdoor accomplishments.</p>

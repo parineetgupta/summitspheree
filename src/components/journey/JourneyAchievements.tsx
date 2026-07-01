@@ -53,18 +53,18 @@ export function JourneyAchievements({ expeditions }: { expeditions: Expedition[]
   }
 
   return (
-    <section ref={containerRef} className="py-40 bg-[#050505] relative w-full overflow-hidden text-white flex flex-col items-center justify-center border-y border-white/5">
+    <section ref={containerRef} className="py-20 md:py-40 bg-[#050505] relative w-full overflow-hidden text-white flex flex-col items-center justify-center border-y border-white/5">
       
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.02] via-[#050505] to-[#050505] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8">
         
-        <div className="flex justify-center w-full mb-24">
-          <div className="text-center bg-[#050505] inline-block px-12 py-8 border border-white/5 rounded-full backdrop-blur-md">
-            <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-4">
+        <div className="flex justify-center w-full mb-12 md:mb-24">
+          <div className="text-center bg-[#050505] inline-block px-8 md:px-12 py-6 md:py-8 border border-white/5 rounded-full backdrop-blur-md">
+            <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-3 md:mb-4">
               Chapter IV
             </p>
-            <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tighter font-light mb-4">
+            <h2 className="text-3xl md:text-5xl font-serif text-white tracking-tighter font-light mb-3 md:mb-4">
               Achievements
             </h2>
             <p className="text-[9px] tracking-[0.2em] uppercase text-[#6b7280]">

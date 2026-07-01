@@ -38,12 +38,12 @@ export default function CompletedTreks() {
     e.mountain?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (loading) return <div className="p-8 max-w-7xl mx-auto">Loading...</div>;
+  if (loading) return <div className="p-4 sm:p-8 max-w-7xl mx-auto">Loading...</div>;
 
   return (
-    <div className="p-8 max-w-7xl mx-auto font-sans">
+    <div className="p-4 sm:p-8 max-w-7xl mx-auto font-sans">
       
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-4">
         <div>
           <h2 className="text-sm font-bold text-white mb-2 tracking-widest uppercase">Completed Treks</h2>
           <p className="text-[10px] tracking-widest uppercase text-white/50">Your archive of successful expeditions.</p>

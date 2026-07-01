@@ -105,8 +105,8 @@ export default function HeroUI() {
   return (
     // justify-center with pb-[10vh] perfectly centers the element slightly above true middle (~45% height)
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pb-[10vh] pointer-events-none px-4 text-center">
-      {/* 60% viewport width constraint */}
-      <div ref={containerRef} className="flex flex-col items-center w-full max-w-[60vw]">
+      {/* 90% viewport width constraint on mobile, 60% on desktop */}
+      <div ref={containerRef} className="flex flex-col items-center w-full max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw]">
         
         {/* Main Title */}
         <h1 

@@ -68,12 +68,12 @@ export function JourneyStats({ expeditions }: { expeditions: Expedition[] }) {
   }, [summits, distance, elevation, dreams]);
 
   return (
-    <section ref={containerRef} className="w-full flex flex-col items-center justify-center bg-[#050505] relative py-32 md:py-40 px-8 border-y border-white/5">
-      <div className="text-center bg-[#050505] inline-block px-12 py-8 border border-white/5 rounded-full backdrop-blur-md mb-20">
-        <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-4">
+    <section ref={containerRef} className="w-full flex flex-col items-center justify-center bg-[#050505] relative py-20 md:py-40 px-6 md:px-8 border-y border-white/5">
+      <div className="text-center bg-[#050505] inline-block px-8 md:px-12 py-6 md:py-8 border border-white/5 rounded-full backdrop-blur-md mb-12 md:mb-20">
+        <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-3 md:mb-4">
           Chapter I
         </p>
-        <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tighter font-light mb-4">
+        <h2 className="text-3xl md:text-5xl font-serif text-white tracking-tighter font-light mb-3 md:mb-4">
           The Journey
         </h2>
         <p className="text-[9px] tracking-[0.2em] uppercase text-[#6b7280]">
@@ -81,31 +81,31 @@ export function JourneyStats({ expeditions }: { expeditions: Expedition[] }) {
         </p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-12 max-w-6xl w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12 max-w-6xl w-full">
         <div className="stat-item flex flex-col items-center text-center">
-          <span ref={summitsRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-4 tracking-tighter font-light">0</span>
-          <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Summits Completed</span>
+          <span ref={summitsRef} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-2 md:mb-4 tracking-tighter font-light">0</span>
+          <span className="text-[8px] md:text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Summits Completed</span>
         </div>
         
         <div className="stat-item flex flex-col items-center text-center">
-          <div className="flex items-baseline gap-2 mb-4">
-            <span ref={distanceRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter font-light">0</span>
-            <span className="text-xl md:text-2xl font-serif italic text-[#4b5563]">km</span>
+          <div className="flex items-baseline gap-1 md:gap-2 mb-2 md:mb-4">
+            <span ref={distanceRef} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter font-light">0</span>
+            <span className="text-lg md:text-2xl font-serif italic text-[#4b5563]">km</span>
           </div>
-          <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Distance Traversed</span>
+          <span className="text-[8px] md:text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Distance Traversed</span>
         </div>
         
         <div className="stat-item flex flex-col items-center text-center">
-          <div className="flex items-baseline gap-2 mb-4">
-            <span ref={elevationRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter font-light">0</span>
-            <span className="text-xl md:text-2xl font-serif italic text-[#4b5563]">m</span>
+          <div className="flex items-baseline gap-1 md:gap-2 mb-2 md:mb-4">
+            <span ref={elevationRef} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter font-light">0</span>
+            <span className="text-lg md:text-2xl font-serif italic text-[#4b5563]">m</span>
           </div>
-          <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Elevation Gained</span>
+          <span className="text-[8px] md:text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Elevation Gained</span>
         </div>
         
         <div className="stat-item flex flex-col items-center text-center">
-          <span ref={dreamsRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-4 tracking-tighter font-light">0</span>
-          <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Dream Expeditions</span>
+          <span ref={dreamsRef} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-2 md:mb-4 tracking-tighter font-light">0</span>
+          <span className="text-[8px] md:text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Dream Expeditions</span>
         </div>
       </div>
     </section>

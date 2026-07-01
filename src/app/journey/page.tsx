@@ -14,6 +14,7 @@ import { JourneyAscents } from "@/components/journey/JourneyAscents";
 import { JourneyAtlas } from "@/components/journey/JourneyAtlas";
 import { JourneyAchievements } from "@/components/journey/JourneyAchievements";
 import { JourneyQuote } from "@/components/journey/JourneyQuote";
+import { Footer } from "@/components/layout/Footer";
 
 export default function JourneyPage() {
   const { user, username: loggedInUsername, loading } = useAuth();
@@ -126,7 +127,7 @@ export default function JourneyPage() {
       
       {/* Edit Button (Owner Only) */}
       {user && (
-        <div className="fixed bottom-12 right-12 z-[90] mix-blend-difference">
+        <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-[90] mix-blend-difference">
           <Link href="/admin">
             <button className="group w-12 h-12 rounded-full bg-transparent border border-white/20 flex items-center justify-center hover:border-white/50 transition-all duration-700 shadow-2xl">
               <Edit2 className="w-4 h-4 text-white/50 group-hover:text-white transition-all duration-700 group-hover:scale-110" />
@@ -136,7 +137,7 @@ export default function JourneyPage() {
       )}
 
       {/* Interactive Back Button & Visual Marker (Links to Hero Landing Page) */}
-      <div className="fixed top-8 left-8 z-[90] mix-blend-difference flex items-center gap-6">
+      <div className="fixed top-6 left-6 md:top-8 md:left-8 z-[90] mix-blend-difference flex items-center gap-4 md:gap-6">
         <Link href="/" className="group cursor-pointer flex items-center gap-2">
           <ArrowLeft className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
           <span className="text-[10px] tracking-[0.4em] text-white/50 group-hover:text-white transition-colors uppercase font-bold">
@@ -163,6 +164,7 @@ export default function JourneyPage() {
         <JourneyAtlas expeditions={expeditions} />
         <JourneyAchievements expeditions={expeditions} />
         <JourneyQuote />
+        <Footer />
       </div>
 
       {/* SHARE MODAL */}

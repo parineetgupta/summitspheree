@@ -174,13 +174,13 @@ function ExpeditionEditor({
         </div>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
         
         {/* Left Sidebar: Tabs */}
-        <div className="w-64 border-r border-white/10 flex flex-col shrink-0 bg-[#0a0a0a]">
-          <div className="p-6">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Workspace</p>
-            <nav className="space-y-1">
+        <div className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col shrink-0 bg-[#0a0a0a]">
+          <div className="p-4 lg:p-6 overflow-x-auto no-scrollbar">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3 lg:mb-4 hidden lg:block">Workspace</p>
+            <nav className="flex lg:flex-col gap-2 space-y-0 lg:space-y-1 w-max lg:w-auto">
               {[
                 { id: 'basic', label: 'Basic Info', icon: Mountain },
                 { id: 'media', label: 'Media Studio', icon: LayoutGrid },
@@ -194,13 +194,13 @@ function ExpeditionEditor({
                 <button
                   key={t.id}
                   onClick={() => setActiveTab(t.id as TabId)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  className={`flex items-center gap-2 lg:gap-3 px-4 py-2 lg:py-3 rounded-lg text-xs lg:text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                     activeTab === t.id 
                       ? 'bg-white/10 text-white shadow-inner shadow-white/5' 
                       : 'text-white/50 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <t.icon className={`w-4 h-4 ${activeTab === t.id ? 'text-white' : 'text-white/30'}`} />
+                  <t.icon className={`w-3 h-3 lg:w-4 lg:h-4 ${activeTab === t.id ? 'text-white' : 'text-white/30'}`} />
                   {t.label}
                 </button>
               ))}
@@ -208,14 +208,17 @@ function ExpeditionEditor({
           </div>
         </div>
 
-        {/* Center Canvas: Active Tab Content */}
-        <div className="flex-1 overflow-y-auto bg-[#050505] p-12 custom-scrollbar relative">
-          <div className="max-w-4xl mx-auto space-y-12 pb-32">
+        {/* Center & Right Wrapper for Mobile Scrolling */}
+        <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden relative custom-scrollbar">
+          
+          {/* Center Canvas: Active Tab Content */}
+          <div className="flex-1 overflow-visible lg:overflow-y-auto bg-[#050505] p-6 md:p-12 relative custom-scrollbar">
+            <div className="max-w-4xl mx-auto space-y-12 lg:pb-32">
             
             {activeTab === 'basic' && (
               <div className="space-y-12 animate-fade-in">
                 {/* Basic Info */}
-                <div className="space-y-10">
+                <div className="space-y-8 lg:space-y-10">
                   <div>
                     <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Expedition Title</label>
                     <input 
@@ -223,10 +226,10 @@ function ExpeditionEditor({
                       value={data.title || ""} 
                       onChange={e => handleChange("title", e.target.value)}
                       placeholder="Enter a cinematic title..." 
-                      className="w-full bg-transparent border-b border-white/10 focus:border-white text-4xl font-light text-white pb-4 px-0 focus:ring-0 placeholder:text-white/20 transition-colors"
+                      className="w-full bg-transparent border-b border-white/10 focus:border-white text-3xl md:text-4xl font-light text-white pb-4 px-0 focus:ring-0 placeholder:text-white/20 transition-colors"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
                     <div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Mountain</label>
                       <input type="text" value={data.mountain || ""} onChange={e => handleChange("mountain", e.target.value)} placeholder="e.g., Matterhorn" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
@@ -247,7 +250,7 @@ function ExpeditionEditor({
                     <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">The source of truth for global statistics</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
                     <div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Start Date</label>
                       <input 
@@ -290,7 +293,7 @@ function ExpeditionEditor({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
                     <div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Distance (KM)</label>
                       <input type="number" step="0.1" value={data.distance === undefined ? "" : data.distance} onChange={e => handleChange("distance", Number(e.target.value))} placeholder="12.5" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
@@ -305,7 +308,7 @@ function ExpeditionEditor({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
                     <div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Region</label>
                       <input type="text" value={data.region || ""} onChange={e => handleChange("region", e.target.value)} placeholder="e.g., Himachal Pradesh" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
@@ -316,7 +319,7 @@ function ExpeditionEditor({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12">
                     <div>
                       <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Difficulty</label>
                       <select value={data.difficulty || "Moderate"} onChange={e => handleChange("difficulty", e.target.value)} className="w-full bg-black border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors">
@@ -520,12 +523,12 @@ function ExpeditionEditor({
         </div>
 
         {/* Right Sidebar: Publish Controls */}
-        <div className="w-80 border-l border-white/10 shrink-0 bg-[#0a0a0a] flex flex-col justify-between">
-          <div className="p-8 space-y-10">
+        <div className="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-white/10 shrink-0 bg-[#0a0a0a] flex flex-col justify-between">
+          <div className="p-6 lg:p-8 space-y-8 lg:space-y-10">
             
             {/* Status & Sync */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Sync Status</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3 lg:mb-4">Sync Status</p>
               <div className="flex items-center gap-3 bg-white/5 p-4 rounded-lg border border-white/10">
                 {saveStatus === "saving" && <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />}
                 {saveStatus === "saved" && <div className="w-2 h-2 rounded-full bg-emerald-500" />}
@@ -538,7 +541,7 @@ function ExpeditionEditor({
 
             {/* Track Status */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Track Status</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3 lg:mb-4">Track Status</p>
               <div className="flex flex-col gap-2">
                 <button 
                   onClick={() => handleChange("status", "draft")}
@@ -566,7 +569,7 @@ function ExpeditionEditor({
 
             {/* Visibility */}
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Visibility</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3 lg:mb-4">Visibility</p>
               <div className="grid grid-cols-2 gap-2">
                 <button 
                   onClick={() => handleChange("visibility", "public")}
@@ -585,7 +588,7 @@ function ExpeditionEditor({
 
           </div>
 
-          <div className="p-8 space-y-4 border-t border-white/10 bg-black/50">
+          <div className="p-6 lg:p-8 space-y-4 border-t border-white/10 bg-black/50 sticky bottom-0 z-20">
             <button 
               onClick={handleManualSave}
               className="w-full py-4 text-xs font-bold uppercase tracking-widest bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition-all duration-300 shadow-[0_0_20px_rgba(5,150,105,0.3)]"
@@ -597,5 +600,6 @@ function ExpeditionEditor({
 
       </div>
     </div>
+  </div>
   );
 }
