@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, use, Suspense } from "react";
+import { useState, useEffect, useCallback, useMemo, use, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/features/auth/components/AuthProvider";
 import { getExpeditionById, createExpedition, updateExpedition } from "@/firebase/db";
@@ -88,8 +88,8 @@ function ExpeditionEditor({
     loadData();
   }, [resolvedParams.id, isNew, user, router]);
 
-  const debouncedSave = useCallback(
-    debounce(async (saveData: Partial<Expedition>) => {
+  const debouncedSave = useMemo(
+    () => debounce(async (saveData: Partial<Expedition>) => {
       setSaveStatus("saving");
       try {
         if (!isNew || saveData.id) {

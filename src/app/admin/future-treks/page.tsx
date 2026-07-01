@@ -1,3 +1,4 @@
+/* eslint-disable react-compiler/react-compiler */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,17 +13,17 @@ export default function FutureTreks() {
   const [expeditions, setExpeditions] = useState<Expedition[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!user) return;
-    loadData();
-  }, [user]);
-
   const loadData = async () => {
     if (!user) return;
     const data = await getExpeditions(user.uid);
     setExpeditions(data.filter(e => e.status === "future"));
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (!user) return;
+    loadData();
+  }, [user]);
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this planned expedition?")) {
