@@ -106,16 +106,16 @@ export default function HeroUI() {
     // True vertical centering (50% viewport height)
     <div className="absolute inset-0 z-10 min-h-screen flex flex-col items-center justify-center pointer-events-none px-4 text-center">
       {/* 100% viewport width constraint on mobile, 60% on desktop */}
-      <div ref={containerRef} className="flex flex-col items-center w-full max-w-full sm:max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw]">
+      <div ref={containerRef} className="relative flex flex-col items-center w-full">
 
         {/* Main Title */}
         <h1
-          className="hero-element text-[9vw] sm:text-5xl md:text-6xl lg:text-[6rem] 2xl:text-[7rem] font-serif font-medium tracking-widest text-white drop-shadow-lg opacity-0 leading-tight w-full whitespace-nowrap pl-[0.1em]"
+          className="hero-element text-center text-[9vw] sm:text-5xl md:text-6xl lg:text-[6rem] 2xl:text-[7rem] font-serif font-medium tracking-widest text-white drop-shadow-lg opacity-0 leading-tight whitespace-nowrap pl-[0.1em]"
           style={{ marginBottom: '56px' }}
         >
           SUMMITSPHERE
         </h1>
-
+          
         {/* Subtitle */}
         <h2
           className="hero-element text-xl sm:text-2xl md:text-4xl font-serif italic text-white/60 drop-shadow-md opacity-0"
@@ -165,7 +165,6 @@ export default function HeroUI() {
             Explore Expeditions
           </a>
         </div>
-
       </div>
     </div>
   );
