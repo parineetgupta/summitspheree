@@ -103,15 +103,15 @@ export default function HeroUI() {
   }, []);
 
   return (
-    // justify-center with pb-[10vh] perfectly centers the element slightly above true middle (~45% height)
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pb-[10vh] pointer-events-none px-4 text-center">
+    // justify-center with pb-[5vh] perfectly centers the element slightly above true middle (~48% height)
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pb-[5vh] pointer-events-none px-4 text-center">
       {/* 100% viewport width constraint on mobile, 60% on desktop */}
       <div ref={containerRef} className="flex flex-col items-center w-full max-w-full sm:max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw]">
 
         {/* Main Title */}
         <h1
-          className="hero-element text-[11vw] sm:text-6xl md:text-8xl lg:text-[9rem] font-serif font-medium tracking-wide text-white drop-shadow-lg opacity-0 leading-tight w-full"
-          style={{ marginBottom: '18px' }}
+          className="hero-element text-[9vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] 2xl:text-[8.5rem] font-serif font-medium tracking-widest text-white drop-shadow-lg opacity-0 leading-tight w-full whitespace-nowrap pl-[0.1em]"
+          style={{ marginBottom: '32px' }}
         >
           SUMMITSPHERE
         </h1>
@@ -134,8 +134,8 @@ export default function HeroUI() {
 
         {/* Navigation / Chapters */}
         <p
-          className="hero-element text-[8px] sm:text-[9px] md:text-[10px] tracking-[3px] md:tracking-[6px] uppercase font-semibold text-[#00D084] opacity-0 flex flex-wrap justify-center gap-y-2 px-2"
-          style={{ marginBottom: '40px' }}
+          className="hero-element text-[8px] sm:text-[9px] md:text-[10px] tracking-[2px] md:tracking-[4px] uppercase font-semibold text-[#00D084] opacity-0 flex flex-wrap justify-center gap-y-2 px-2"
+          style={{ marginBottom: '24px' }}
         >
           ✦ CHAPTERS &nbsp;•&nbsp; ATLAS &nbsp;•&nbsp; EXPEDITIONS &nbsp;•&nbsp; MEMORIES ✦
         </p>
