@@ -110,15 +110,15 @@ export default function HeroUI() {
 
         {/* Main Title */}
         <h1
-          className="hero-element text-[9vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] 2xl:text-[8.5rem] font-serif font-medium tracking-widest text-white drop-shadow-lg opacity-0 leading-tight w-full whitespace-nowrap pl-[0.1em]"
-          style={{ marginBottom: '32px' }}
+          className="hero-element text-[9vw] sm:text-5xl md:text-6xl lg:text-[6rem] 2xl:text-[7rem] font-serif font-medium tracking-widest text-white drop-shadow-lg opacity-0 leading-tight w-full whitespace-nowrap pl-[0.1em]"
+          style={{ marginBottom: '56px' }}
         >
           SUMMITSPHERE
         </h1>
 
         {/* Subtitle */}
         <h2
-          className="hero-element text-lg sm:text-xl md:text-3xl font-serif italic text-white/60 drop-shadow-md opacity-0"
+          className="hero-element text-xl sm:text-2xl md:text-4xl font-serif italic text-white/60 drop-shadow-md opacity-0"
           style={{ marginBottom: '24px' }}
         >
           Every summit becomes a story.
@@ -126,7 +126,7 @@ export default function HeroUI() {
 
         {/* Description / Sub-Subtitle */}
         <p
-          className="hero-element text-[10px] sm:text-xs md:text-sm font-sans text-white/50 opacity-0 px-4"
+          className="hero-element text-xs sm:text-sm md:text-base tracking-wide font-sans text-white/50 opacity-0 px-4"
           style={{ marginBottom: '24px' }}
         >
           A private archive of mountains, memories and milestones.
@@ -135,7 +135,7 @@ export default function HeroUI() {
         {/* Navigation / Chapters */}
         <p
           className="hero-element text-[8px] sm:text-[9px] md:text-[10px] tracking-[2px] md:tracking-[4px] uppercase font-semibold text-[#00D084] opacity-0 flex flex-wrap justify-center gap-y-2 px-2"
-          style={{ marginBottom: '24px' }}
+          style={{ marginBottom: '0px' }}
         >
           ✦ CHAPTERS &nbsp;•&nbsp; ATLAS &nbsp;•&nbsp; EXPEDITIONS &nbsp;•&nbsp; MEMORIES ✦
         </p>
@@ -159,8 +159,8 @@ export default function HeroUI() {
           </button>
         </div>
 
-        {/* Secondary Text Link (Positioned absolutely so it doesn't push the hero group up) */}
-        <div className="hero-button opacity-0 absolute bottom-12 left-1/2 -translate-x-1/2">
+        {/* Secondary Text Link */}
+        <div className="hero-button opacity-0 mt-8">
           <a href="/journey" className="text-[10px] font-sans tracking-[0.2em] uppercase text-[#B8B8B8] hover:text-[#00D084] transition-colors border-b border-transparent hover:border-[#00D084] pb-1">
             Explore Expeditions
           </a>
