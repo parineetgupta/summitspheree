@@ -159,8 +159,8 @@ export default function HeroUI() {
           </button>
         </div>
 
-        {/* Secondary Text Link */}
-        <div className="hero-button opacity-0 mt-8">
+        {/* Secondary Text Link (Positioned absolutely so it doesn't push the hero group up) */}
+        <div className="hero-button opacity-0 absolute bottom-12 left-1/2 -translate-x-1/2">
           <a href="/journey" className="text-[10px] font-sans tracking-[0.2em] uppercase text-[#B8B8B8] hover:text-[#00D084] transition-colors border-b border-transparent hover:border-[#00D084] pb-1">
             Explore Expeditions
           </a>
