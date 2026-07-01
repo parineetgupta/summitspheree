@@ -4,34 +4,39 @@ import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Expedition } from "@/types";
+import { Compass } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const formatDate = (dateString: string) => {
+  if (!dateString) return "TBD";
+  try {
+    const d = new Date(dateString);
+    return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase();
+  } catch (e) {
+    return dateString.toUpperCase();
+  }
+};
+
 export function JourneyAtlas({ expeditions }: { expeditions: Expedition[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Extract unique locations
-  const uniqueLocations = Array.from(new Set(expeditions.map(e => e.location).filter(Boolean)));
+  // LOGGING: Requested by user to track down filtering issues
+  console.log("JourneyAtlas - All Expeditions Received:", expeditions.length);
+  
+  const futureTreks = expeditions.filter(e => e.status === 'future');
+  
+  console.log("JourneyAtlas - Future Treks after filter:", futureTreks.length);
+  console.log("JourneyAtlas - Future Treks data:", futureTreks);
 
   useEffect(() => {
+    if (futureTreks.length === 0) return;
     const ctx = gsap.context(() => {
-      // Fade in the atlas container
-      gsap.from(".atlas-container", {
-        opacity: 0,
-        y: 50,
-        duration: 1.5,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-        }
-      });
-
-      // Subtle slow scale (camera movement effect)
-      gsap.to(".atlas-grid", {
-        scale: 1.1,
+      
+      gsap.to(".atlas-timeline-line", {
+        height: "100%",
         ease: "none",
         scrollTrigger: {
           trigger: containerRef.current,
@@ -41,70 +46,114 @@ export function JourneyAtlas({ expeditions }: { expeditions: Expedition[] }) {
         }
       });
 
-      // Pop markers in
-      gsap.from(".atlas-marker", {
-        scale: 0,
+      gsap.from(".chapter-title-iii", {
+        y: 40,
         opacity: 0,
-        stagger: 0.1,
-        ease: "back.out(1.5)",
+        duration: 1.5,
+        ease: "power2.out",
         scrollTrigger: {
-          trigger: ".atlas-container",
-          start: "top 60%",
+          trigger: ".chapter-title-iii",
+          start: "top 80%",
         }
       });
+      
     }, containerRef);
-
     return () => ctx.revert();
-  }, [expeditions]);
-
-  if (uniqueLocations.length === 0) return null;
+  }, [futureTreks]);
 
   return (
-    <section ref={containerRef} className="py-40 bg-[#050505] relative z-10 w-full overflow-hidden flex flex-col items-center">
-      <div className="text-center mb-24 z-20">
-        <p className="text-[10px] tracking-[0.5em] text-[#6b7280] uppercase mb-8">The Regions</p>
-        <h2 className="text-5xl md:text-7xl font-serif text-white tracking-tighter font-light italic">The Atlas</h2>
+    <section ref={containerRef} className="py-40 bg-[#050505] relative w-full text-white overflow-hidden">
+      
+      {/* Connecting Vertical Timeline */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full z-0 flex justify-center">
+        <div className="atlas-timeline-line w-full bg-gradient-to-b from-[#00D084] via-white/10 to-[#00D084] h-0 shadow-[0_0_15px_rgba(0,208,132,0.3)]" />
       </div>
 
-      <div className="atlas-container relative w-full max-w-7xl aspect-[21/9] md:aspect-[2.5/1] bg-[#020202] overflow-hidden flex items-center justify-center">
-        {/* Dark terrain grid simulation */}
-        <div className="atlas-grid absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#050505_80%)] z-0" />
+      <div className="max-w-6xl mx-auto px-8 relative z-10 flex flex-col gap-32">
         
-        <div className="relative w-full h-full flex items-center justify-center p-12 z-10">
-          <div className="flex flex-wrap justify-center gap-12 relative">
-            {uniqueLocations.map((loc, idx) => {
-              const matchedExp = expeditions.find(e => e.location === loc);
+        {/* Chapter Header */}
+        <div className="text-center chapter-title-iii bg-[#050505] inline-block px-12 py-8 relative left-1/2 -translate-x-1/2 border border-white/5 rounded-full backdrop-blur-md">
+          <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-4">
+            Chapter III
+          </p>
+          <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tighter font-light mb-4">
+            The Atlas
+          </h2>
+          <p className="text-[9px] tracking-[0.2em] uppercase text-[#6b7280]">
+            The adventures that still call from the horizon.
+          </p>
+        </div>
+
+        <div className="atlas-grid grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+          {futureTreks.length === 0 ? (
+            <div className="col-span-full py-12 text-center border border-white/10 bg-white/5 backdrop-blur-md">
+              <p className="text-[10px] tracking-[0.4em] uppercase text-white/50">No Future Tracks Available</p>
+              <p className="text-xs text-white/30 mt-2 font-light">Add a Future Track in the Admin Panel to see it here.</p>
+            </div>
+          ) : (
+            futureTreks.map((trek) => {
+              const mediaImages = (trek.media || []).filter(m => m.type === 'image');
+              const coverImage = trek.heroImage || (mediaImages.length > 0 ? mediaImages[0].url : null);
+              
               return (
-                <div key={idx} className="atlas-marker relative group cursor-crosshair flex flex-col items-center">
-                  <div className="w-2 h-2 rounded-full bg-[#00D084] shadow-[0_0_15px_rgba(0,208,132,0.8)] z-10 transition-transform duration-500 group-hover:scale-150" />
+                <div key={trek.id} className="atlas-card group flex flex-col justify-between p-12 bg-white/[0.01] border border-white/5 hover:border-white/20 transition-all duration-700 relative overflow-hidden backdrop-blur-sm">
                   
-                  {/* Subtle Pulse */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-[#00D084]/20 rounded-full scale-50 opacity-0 group-hover:opacity-100 group-hover:scale-150 group-hover:border-[#00D084]/50 transition-all duration-700 pointer-events-none" />
+                  {/* Background Image & Overlay */}
+                  <div className="absolute inset-0 z-0">
+                    {coverImage ? (
+                      <img 
+                        src={coverImage} 
+                        alt={trek.title || trek.mountain || "Peak"} 
+                        className="w-full h-full object-cover opacity-10 filter grayscale brightness-[0.5] group-hover:opacity-40 group-hover:grayscale-[0.5] group-hover:scale-105 transition-all duration-1000 ease-out"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00D084]/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                    )}
+                    <div className="absolute inset-0 bg-[#050505]/60 z-10" />
+                  </div>
                   
-                  {/* Stealth UI Tooltip */}
-                  <div className="absolute top-8 opacity-0 group-hover:opacity-100 -translate-y-4 group-hover:translate-y-0 transition-all duration-500 flex flex-col items-center pointer-events-none min-w-[200px]">
-                    <div className="h-4 w-px bg-white/20 mb-2" />
-                    <div className="bg-[#0a0a0a] border border-white/10 px-6 py-4 backdrop-blur-md flex flex-col items-center text-center">
-                      <span className="text-[8px] tracking-[0.3em] uppercase text-[#00D084] mb-2">{loc}</span>
-                      <span className="text-xl font-serif text-white italic mb-4">{matchedExp?.title || 'Unknown Peak'}</span>
-                      <div className="flex gap-4">
-                        <div className="flex flex-col items-center">
-                          <span className="text-[7px] tracking-widest text-[#4b5563] uppercase">Dist</span>
-                          <span className="text-xs font-serif text-[#d1d5db] italic">{matchedExp?.distance || '--'}km</span>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <span className="text-[7px] tracking-widest text-[#4b5563] uppercase">Elev</span>
-                          <span className="text-xs font-serif text-[#d1d5db] italic">{matchedExp?.elevation || '--'}m</span>
-                        </div>
-                      </div>
+                  <div className="relative z-20 mb-16">
+                    <div className="flex items-center justify-between mb-8">
+                      <Compass className="w-6 h-6 text-[#00D084]/40 group-hover:text-[#00D084]/80 transition-colors duration-700 group-hover:rotate-45" />
+                      <span className="text-[8px] tracking-[0.3em] uppercase text-[#00D084] border border-[#00D084]/20 px-3 py-1 rounded-full bg-[#00D084]/5">
+                        Planned
+                      </span>
+                    </div>
+                  
+                  <h3 className="text-4xl font-serif tracking-tighter italic font-light text-white mb-2">
+                    {trek.title || trek.mountain || "Unknown Peak"}
+                  </h3>
+                  <p className="text-[9px] tracking-[0.3em] uppercase text-[#6b7280] mb-8">
+                    {trek.location || "Unknown Location"}
+                  </p>
+                  
+                  <div className="w-full h-px bg-white/5 mb-8" />
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-[8px] tracking-[0.3em] uppercase text-[#1e3a8a] mb-1 font-semibold">Target Date</p>
+                      <p className="text-[10px] tracking-widest text-white/80">{formatDate(trek.date || "")}</p>
+                    </div>
+                    <div>
+                      <p className="text-[8px] tracking-[0.3em] uppercase text-[#1e3a8a] mb-1 font-semibold">Target Elevation</p>
+                      <p className="text-[10px] tracking-widest text-white/80">{trek.elevation ? `${trek.elevation}m` : "TBD"}</p>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+                
+                <div className="relative z-20">
+                  <p className="text-[8px] tracking-[0.3em] uppercase text-[#1e3a8a] mb-3 font-semibold">Field Notes</p>
+                  <p className="text-xs text-[#888888] font-light leading-relaxed italic border-l border-white/10 pl-4">
+                    {trek.journal || "Preparations and routing are underway. Awaiting conditions."}
+                  </p>
+                </div>
+  
+              </div>
+            );
+          })
+          )}
         </div>
+
       </div>
     </section>
   );

@@ -97,7 +97,19 @@ export function JourneyTrophies({ expeditions }: { expeditions: Expedition[] }) 
     return () => ctx.revert();
   }, [trophiesData]);
 
-  if (expeditions.length === 0) return null;
+  if (expeditions.length === 0) {
+    return (
+      <section className="min-h-[50vh] py-40 bg-[#050505] relative z-10 w-full flex flex-col justify-center items-center overflow-hidden">
+        <div className="text-center mb-16 relative z-10">
+          <p className="text-[10px] tracking-[0.5em] text-[#6b7280] uppercase mb-8">Hall of Fame</p>
+          <h2 className="text-5xl md:text-7xl font-serif text-white tracking-tighter font-light italic mb-8">The Trophies</h2>
+          <p className="text-[10px] tracking-[0.4em] uppercase text-white/30 max-w-sm mx-auto leading-relaxed border border-white/5 bg-white/[0.02] p-8 rounded-xl backdrop-blur-sm">
+            The hall is quiet.<br/>No trophies awarded yet.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={containerRef} className="min-h-screen py-40 bg-[#050505] relative z-10 w-full overflow-hidden flex flex-col justify-center">

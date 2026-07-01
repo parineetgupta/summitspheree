@@ -33,7 +33,7 @@ export default function Atmosphere() {
     <>
       {/* Floating dust particles */}
       <Sparkles 
-        count={500} 
+        count={250} 
         scale={[40, 20, 40]} 
         position={[0, 5, -10]} 
         size={2} 
@@ -45,12 +45,12 @@ export default function Atmosphere() {
       {/* Volumetric Clouds */}
       <group ref={cloudsRef}>
         <Clouds material={THREE.MeshBasicMaterial}>
-          <Cloud segments={40} bounds={[20, 2, 20]} volume={10} color="#888888" position={[0, 10, -25]} opacity={0.3} speed={0.2} />
+          <Cloud segments={20} bounds={[20, 2, 20]} volume={10} color="#888888" position={[0, 10, -25]} opacity={0.3} speed={0.2} />
           <group ref={leftCloudRef} position={[-15, 8, -20]}>
-            <Cloud segments={40} bounds={[20, 2, 20]} volume={10} color="#aaaaaa" opacity={0.2} speed={0.1} />
+            <Cloud segments={20} bounds={[20, 2, 20]} volume={10} color="#aaaaaa" opacity={0.2} speed={0.1} />
           </group>
           <group ref={rightCloudRef} position={[15, 12, -22]}>
-            <Cloud segments={40} bounds={[20, 2, 20]} volume={10} color="#666666" opacity={0.4} speed={0.3} />
+            <Cloud segments={20} bounds={[20, 2, 20]} volume={10} color="#666666" opacity={0.4} speed={0.3} />
           </group>
         </Clouds>
       </group>

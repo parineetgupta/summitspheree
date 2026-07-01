@@ -25,7 +25,8 @@ export const TrophyRoom = forwardRef<{ setLightIntensity: (val: number) => void 
     return (
       <div className="absolute inset-0 pointer-events-none z-0">
         <Canvas 
-          shadows 
+          shadows
+          dpr={[1, 1.5]}
           gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping }} 
           className="pointer-events-auto"
         >

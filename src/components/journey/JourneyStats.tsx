@@ -8,19 +8,21 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-interface JourneyStatsProps {
-  summits: number;
-  distance: number;
-  elevation: number;
-}
+import { Expedition } from "@/types";
 
-export function JourneyStats({ summits, distance, elevation }: JourneyStatsProps) {
+export function JourneyStats({ expeditions }: { expeditions: Expedition[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const summitsRef = useRef<HTMLSpanElement>(null);
   const distanceRef = useRef<HTMLSpanElement>(null);
   const elevationRef = useRef<HTMLSpanElement>(null);
   const dreamsRef = useRef<HTMLSpanElement>(null);
+
+  const completed = expeditions.filter(e => e.status === "completed");
+  const summits = completed.length;
+  const distance = completed.reduce((acc, e) => acc + (Number(e.distance) || 0), 0);
+  const elevation = completed.reduce((acc, e) => acc + (Number(e.elevation) || 0), 0);
+  const dreams = expeditions.filter(e => e.status === "future").length;
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -58,41 +60,51 @@ export function JourneyStats({ summits, distance, elevation }: JourneyStatsProps
       setupCounter(summitsRef, summits);
       setupCounter(distanceRef, distance);
       setupCounter(elevationRef, elevation);
-      setupCounter(dreamsRef, 0); // Placeholder for "Dream Expeditions"
+      setupCounter(dreamsRef, dreams);
 
     }, containerRef);
 
     return () => ctx.revert();
-  }, [summits, distance, elevation]);
+  }, [summits, distance, elevation, dreams]);
 
   return (
-    <section ref={containerRef} className="min-h-[80vh] w-full flex flex-col items-center justify-center bg-[#050505] relative py-32 px-8">
-      <p className="text-[10px] tracking-[0.5em] text-[#6b7280] uppercase mb-32">The Journey So Far</p>
+    <section ref={containerRef} className="w-full flex flex-col items-center justify-center bg-[#050505] relative py-32 md:py-40 px-8 border-y border-white/5">
+      <div className="text-center bg-[#050505] inline-block px-12 py-8 border border-white/5 rounded-full backdrop-blur-md mb-20">
+        <p className="text-[10px] tracking-[0.4em] text-[#00D084] uppercase font-semibold mb-4">
+          Chapter I
+        </p>
+        <h2 className="text-4xl md:text-5xl font-serif text-white tracking-tighter font-light mb-4">
+          The Journey
+        </h2>
+        <p className="text-[9px] tracking-[0.2em] uppercase text-[#6b7280]">
+          The story so far.
+        </p>
+      </div>
       
-      <div className="flex flex-wrap justify-center gap-24 md:gap-40 max-w-6xl w-full">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-16 md:gap-12 max-w-6xl w-full">
         <div className="stat-item flex flex-col items-center text-center">
-          <span ref={summitsRef} className="text-7xl md:text-9xl font-serif text-white mb-6 tracking-tighter font-light">0</span>
+          <span ref={summitsRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-4 tracking-tighter font-light">0</span>
           <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Summits Completed</span>
         </div>
         
         <div className="stat-item flex flex-col items-center text-center">
-          <div className="flex items-baseline gap-2 mb-6">
-            <span ref={distanceRef} className="text-7xl md:text-9xl font-serif text-white tracking-tighter font-light">0</span>
-            <span className="text-2xl font-serif italic text-[#4b5563]">km</span>
+          <div className="flex items-baseline gap-2 mb-4">
+            <span ref={distanceRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter font-light">0</span>
+            <span className="text-xl md:text-2xl font-serif italic text-[#4b5563]">km</span>
           </div>
           <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Distance Traversed</span>
         </div>
         
         <div className="stat-item flex flex-col items-center text-center">
-          <div className="flex items-baseline gap-2 mb-6">
-            <span ref={elevationRef} className="text-7xl md:text-9xl font-serif text-white tracking-tighter font-light">0</span>
-            <span className="text-2xl font-serif italic text-[#4b5563]">m</span>
+          <div className="flex items-baseline gap-2 mb-4">
+            <span ref={elevationRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter font-light">0</span>
+            <span className="text-xl md:text-2xl font-serif italic text-[#4b5563]">m</span>
           </div>
           <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Elevation Gained</span>
         </div>
         
         <div className="stat-item flex flex-col items-center text-center">
-          <span ref={dreamsRef} className="text-7xl md:text-9xl font-serif text-white mb-6 tracking-tighter font-light">0</span>
+          <span ref={dreamsRef} className="text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-4 tracking-tighter font-light">0</span>
           <span className="text-[9px] tracking-[0.3em] text-[#6b7280] uppercase">Dream Expeditions</span>
         </div>
       </div>

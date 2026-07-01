@@ -8,7 +8,7 @@ import {
   Calendar, 
   Image as ImageIcon, 
   Award,
-  Settings,
+  Edit,
   Mountain
 } from "lucide-react";
 
@@ -18,7 +18,7 @@ const navItems = [
   { name: 'Future Treks', href: '/admin/future-treks', icon: Calendar },
   { name: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
   { name: 'Achievements', href: '/admin/achievements', icon: Award },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
+  { name: 'Settings', href: '/admin/settings', icon: Edit },
 ];
 
 export function Sidebar() {

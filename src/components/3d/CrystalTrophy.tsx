@@ -21,8 +21,8 @@ export function CrystalTrophy({ position = [0, 0, 0], scale = [1, 1, 1], index }
   
   // Generate a unique, highly detailed mountain crystal geometry using SimplexNoise
   const geometry = useMemo(() => {
-    // High-resolution cone (radius, height, radialSegments, heightSegments)
-    const geo = new THREE.ConeGeometry(1, 3, 128, 128);
+    // Reduced geometry density for performance
+    const geo = new THREE.ConeGeometry(1, 3, 64, 64);
     const pos = geo.attributes.position;
     
     // Seed noise with the trophy index so they all look different
@@ -83,7 +83,8 @@ export function CrystalTrophy({ position = [0, 0, 0], scale = [1, 1, 1], index }
       <mesh ref={crystalRef} geometry={geometry} position={[0, 1.5, 0]} castShadow receiveShadow>
         <MeshTransmissionMaterial 
           backside
-          samples={4}
+          resolution={512} // Cap refraction resolution
+          samples={2} // Reduced from 4
           thickness={3}
           roughness={0} // Completely polished surface
           transmission={1}

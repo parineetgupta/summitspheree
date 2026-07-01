@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, use } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback, use, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/features/auth/components/AuthProvider";
 import { getExpeditionById, createExpedition, updateExpedition } from "@/firebase/db";
 import { Expedition, ExpeditionMedia } from "@/types";
@@ -31,18 +31,43 @@ const DEFAULT_EXPEDITION: Partial<Expedition> = {
   heroImage: "",
   media: [],
   status: "draft",
-  visibility: "private"
+  visibility: "private",
+  difficulty: "Moderate",
+  region: "",
+  country: "",
+  trackType: "Expedition",
+  endDate: new Date().toISOString().split('T')[0]
 };
 
 type TabId = 'basic' | 'media' | 'journal' | 'route' | 'weather' | 'equipment' | 'highlights';
 
-export default function ExpeditionEditor({ params }: { params: Promise<{ id: string }> }) {
+export default function ExpeditionEditorPage({ params }: { params: Promise<{ id: string }> }) {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black text-white flex items-center justify-center">Loading Studio...</div>}>
+      <ExpeditionEditor params={params} />
+    </Suspense>
+  );
+}
+
+function ExpeditionEditor({ 
+  params
+}: { 
+  params: Promise<{ id: string }>;
+}) {
   const resolvedParams = use(params);
+  const searchParamsHook = useSearchParams();
+  
   const isNew = resolvedParams.id === "new";
   const { user } = useAuth();
   const router = useRouter();
   
-  const [data, setData] = useState<Partial<Expedition>>(DEFAULT_EXPEDITION);
+  const statusParam = searchParamsHook?.get("status");
+  const initialStatus = (statusParam as "draft" | "completed" | "future") || "draft";
+  
+  const [data, setData] = useState<Partial<Expedition>>({
+    ...DEFAULT_EXPEDITION,
+    status: isNew ? initialStatus : DEFAULT_EXPEDITION.status
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "error">("saved");
   const [activeTab, setActiveTab] = useState<TabId>('basic');
@@ -68,6 +93,7 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
       setSaveStatus("saving");
       try {
         if (!isNew || saveData.id) {
+          console.log("Auto-saving payload:", saveData);
           await updateExpedition(saveData.id || resolvedParams.id, saveData);
           setSaveStatus("saved");
         }
@@ -108,11 +134,13 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
     if (!isNew || data.id) debouncedSave(updated);
   };
 
-  const handleManualSave = async (status: "draft" | "completed" | "future") => {
+
+  const handleManualSave = async () => {
     if (!user) return;
     setSaveStatus("saving");
     try {
-      const payload = { ...data, userId: user.uid, status };
+      const payload = { ...data, userId: user.uid };
+      console.log("Manual save payload:", payload);
       if (isNew && !data.id) {
         const newId = await createExpedition(payload as any);
         setData({ ...payload, id: newId });
@@ -122,6 +150,7 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
         setSaveStatus("saved");
       }
     } catch (e) {
+      console.error("Manual save failed:", e);
       setSaveStatus("error");
     }
   };
@@ -155,6 +184,7 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
               {[
                 { id: 'basic', label: 'Basic Info', icon: Mountain },
                 { id: 'media', label: 'Media Studio', icon: LayoutGrid },
+
                 { id: 'journal', label: 'Journal', icon: FileText },
                 { id: 'route', label: 'Route Data', icon: Map },
                 { id: 'weather', label: 'Weather', icon: Wind },
@@ -183,36 +213,159 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
           <div className="max-w-4xl mx-auto space-y-12 pb-32">
             
             {activeTab === 'basic' && (
-              <div className="space-y-10 animate-fade-in">
-                <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Expedition Title</label>
-                  <input 
-                    type="text" 
-                    value={data.title || ""} 
-                    onChange={e => handleChange("title", e.target.value)}
-                    placeholder="Enter a cinematic title..." 
-                    className="w-full bg-transparent border-b border-white/10 focus:border-white text-4xl font-light text-white pb-4 px-0 focus:ring-0 placeholder:text-white/20 transition-colors"
-                  />
+              <div className="space-y-12 animate-fade-in">
+                {/* Basic Info */}
+                <div className="space-y-10">
+                  <div>
+                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Expedition Title</label>
+                    <input 
+                      type="text" 
+                      value={data.title || ""} 
+                      onChange={e => handleChange("title", e.target.value)}
+                      placeholder="Enter a cinematic title..." 
+                      className="w-full bg-transparent border-b border-white/10 focus:border-white text-4xl font-light text-white pb-4 px-0 focus:ring-0 placeholder:text-white/20 transition-colors"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-12">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Mountain</label>
+                      <input type="text" value={data.mountain || ""} onChange={e => handleChange("mountain", e.target.value)} placeholder="e.g., Matterhorn" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Location / Range</label>
+                      <input type="text" value={data.location || ""} onChange={e => handleChange("location", e.target.value)} placeholder="e.g., Pennine Alps, Switzerland" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 gap-12">
+
+                <div className="w-full h-px bg-white/10" />
+
+                {/* Journey Metrics */}
+                <div className="space-y-10">
                   <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Mountain</label>
-                    <input type="text" value={data.mountain || ""} onChange={e => handleChange("mountain", e.target.value)} placeholder="e.g., Matterhorn" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    <h3 className="text-xl font-serif tracking-wide text-white mb-2">Journey Metrics</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">The source of truth for global statistics</p>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Location / Range</label>
-                    <input type="text" value={data.location || ""} onChange={e => handleChange("location", e.target.value)} placeholder="e.g., Pennine Alps, Switzerland" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+
+                  <div className="grid grid-cols-2 gap-12">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Start Date</label>
+                      <input 
+                        type="date"
+                        max="9999-12-31"
+                        value={data.date || ""} 
+                        onChange={e => {
+                          const val = e.target.value;
+                          const updates: Partial<Expedition> = { date: val };
+                          if (data.endDate && val) {
+                            const diff = Math.ceil((new Date(data.endDate).getTime() - new Date(val).getTime()) / (1000 * 60 * 60 * 24));
+                            updates.duration = Math.max(1, diff + 1);
+                          }
+                          const updated = { ...data, ...updates };
+                          setData(updated);
+                          if (!isNew || data.id) debouncedSave(updated);
+                        }} 
+                        className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors dark-calendar-icon" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">End Date</label>
+                      <input 
+                        type="date"
+                        max="9999-12-31"
+                        value={data.endDate || ""} 
+                        onChange={e => {
+                          const val = e.target.value;
+                          const updates: Partial<Expedition> = { endDate: val };
+                          if (data.date && val) {
+                            const diff = Math.ceil((new Date(val).getTime() - new Date(data.date).getTime()) / (1000 * 60 * 60 * 24));
+                            updates.duration = Math.max(1, diff + 1);
+                          }
+                          const updated = { ...data, ...updates };
+                          setData(updated);
+                          if (!isNew || data.id) debouncedSave(updated);
+                        }} 
+                        className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors dark-calendar-icon" 
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-2 gap-12">
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Summit Date</label>
-                    <input type="date" value={data.date || ""} onChange={e => handleChange("date", e.target.value)} className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors dark-calendar-icon" />
+
+                  <div className="grid grid-cols-3 gap-8">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Distance (KM)</label>
+                      <input type="number" step="0.1" value={data.distance === undefined ? "" : data.distance} onChange={e => handleChange("distance", Number(e.target.value))} placeholder="12.5" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Elevation Gain (M)</label>
+                      <input type="number" value={data.elevation === undefined ? "" : data.elevation} onChange={e => handleChange("elevation", Number(e.target.value))} placeholder="1450" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Duration (Days)</label>
+                      <input type="number" value={data.duration === undefined ? "" : data.duration} onChange={e => handleChange("duration", Number(e.target.value))} className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Duration (Days)</label>
-                    <input type="number" value={data.duration || 0} onChange={e => handleChange("duration", Number(e.target.value))} className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors" />
+
+                  <div className="grid grid-cols-2 gap-12">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Region</label>
+                      <input type="text" value={data.region || ""} onChange={e => handleChange("region", e.target.value)} placeholder="e.g., Himachal Pradesh" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Country</label>
+                      <input type="text" value={data.country || ""} onChange={e => handleChange("country", e.target.value)} placeholder="e.g., India" className="w-full bg-transparent border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 placeholder:text-white/20 transition-colors" />
+                    </div>
                   </div>
+
+                  <div className="grid grid-cols-2 gap-12">
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Difficulty</label>
+                      <select value={data.difficulty || "Moderate"} onChange={e => handleChange("difficulty", e.target.value)} className="w-full bg-black border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors">
+                        <option value="Easy">Easy</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Hard">Hard</option>
+                        <option value="Extreme">Extreme</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Track Type</label>
+                      <select value={data.trackType || "Expedition"} onChange={e => handleChange("trackType", e.target.value)} className="w-full bg-black border-b border-white/10 focus:border-white text-lg text-white pb-2 px-0 focus:ring-0 transition-colors">
+                        <option value="Trek">Trek</option>
+                        <option value="Expedition">Expedition</option>
+                        <option value="Climb">Climb</option>
+                        <option value="Journey">Journey</option>
+                        <option value="Exploration">Exploration</option>
+                      </select>
+                    </div>
+                  </div>
+                  {/* Achievement Contribution Read-Only Preview */}
+                  <div className="mt-12 bg-white/[0.02] border border-white/10 rounded-xl p-8">
+                    <h4 className="text-sm font-bold tracking-widest uppercase text-white/70 mb-6">Achievement Contribution</h4>
+                    <p className="text-[10px] uppercase tracking-widest text-white/40 mb-8">This track may contribute to:</p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2 text-emerald-400">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span className="text-xs font-bold uppercase tracking-widest">Highest Summit</span>
+                        </div>
+                        <p className="text-2xl font-serif text-white">{data.elevation || 0}m <span className="text-xs font-sans text-white/40 uppercase tracking-widest">Candidate</span></p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2 text-emerald-400">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span className="text-xs font-bold uppercase tracking-widest">Long Walk</span>
+                        </div>
+                        <p className="text-2xl font-serif text-white">{data.distance || 0}km <span className="text-xs font-sans text-white/40 uppercase tracking-widest">Candidate</span></p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2 text-emerald-400">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span className="text-xs font-bold uppercase tracking-widest">Explorer</span>
+                        </div>
+                        <p className="text-2xl font-serif text-white truncate">{data.region || "None"} <span className="text-xs font-sans text-white/40 uppercase tracking-widest">Region</span></p>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             )}
@@ -300,6 +453,8 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
               </div>
             )}
 
+
+
             {activeTab === 'journal' && (
               <div className="animate-fade-in h-full flex flex-col">
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-8 text-center">The Documentary Journal</label>
@@ -315,16 +470,6 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
 
             {activeTab === 'route' && (
               <div className="space-y-12 animate-fade-in">
-                <div className="grid grid-cols-2 gap-12">
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Total Distance (KM)</label>
-                    <input type="number" value={data.distance || 0} onChange={e => handleChange("distance", Number(e.target.value))} className="w-full bg-transparent border-b border-white/10 focus:border-white text-3xl font-light text-white pb-2 px-0 focus:ring-0 transition-colors" />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold uppercase tracking-widest text-white/40 mb-3">Elevation Gained (M)</label>
-                    <input type="number" value={data.elevation || 0} onChange={e => handleChange("elevation", Number(e.target.value))} className="w-full bg-transparent border-b border-white/10 focus:border-white text-3xl font-light text-white pb-2 px-0 focus:ring-0 transition-colors" />
-                  </div>
-                </div>
                 <div className="p-8 border border-dashed border-white/10 rounded-xl flex items-center justify-center h-64 bg-white/5">
                   <div className="text-center">
                     <Navigation className="w-6 h-6 text-white/20 mx-auto mb-3" />
@@ -391,6 +536,34 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
               </div>
             </div>
 
+            {/* Track Status */}
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Track Status</p>
+              <div className="flex flex-col gap-2">
+                <button 
+                  onClick={() => handleChange("status", "draft")}
+                  className={`flex items-center justify-start px-4 py-3 rounded-lg text-xs font-bold tracking-widest uppercase transition-all ${data.status === 'draft' ? 'bg-white/10 text-white border border-white/20' : 'bg-transparent border border-white/5 text-white/50 hover:bg-white/5 hover:text-white'}`}
+                >
+                  <div className={`w-2 h-2 rounded-full mr-3 ${data.status === 'draft' ? 'bg-white' : 'bg-white/20'}`} />
+                  Draft
+                </button>
+                <button 
+                  onClick={() => handleChange("status", "future")}
+                  className={`flex items-center justify-start px-4 py-3 rounded-lg text-xs font-bold tracking-widest uppercase transition-all ${data.status === 'future' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-transparent border border-white/5 text-white/50 hover:bg-white/5 hover:text-white'}`}
+                >
+                  <div className={`w-2 h-2 rounded-full mr-3 ${data.status === 'future' ? 'bg-blue-400' : 'bg-white/20'}`} />
+                  Future Track
+                </button>
+                <button 
+                  onClick={() => handleChange("status", "completed")}
+                  className={`flex items-center justify-start px-4 py-3 rounded-lg text-xs font-bold tracking-widest uppercase transition-all ${data.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-transparent border border-white/5 text-white/50 hover:bg-white/5 hover:text-white'}`}
+                >
+                  <div className={`w-2 h-2 rounded-full mr-3 ${data.status === 'completed' ? 'bg-emerald-400' : 'bg-white/20'}`} />
+                  Completed Track
+                </button>
+              </div>
+            </div>
+
             {/* Visibility */}
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-4">Visibility</p>
@@ -414,16 +587,10 @@ export default function ExpeditionEditor({ params }: { params: Promise<{ id: str
 
           <div className="p-8 space-y-4 border-t border-white/10 bg-black/50">
             <button 
-              onClick={() => handleManualSave("draft")}
-              className="w-full py-4 text-xs font-bold uppercase tracking-widest text-white border border-white/20 rounded-lg hover:bg-white hover:text-black transition-all duration-300"
-            >
-              Save as Draft
-            </button>
-            <button 
-              onClick={() => handleManualSave("completed")}
+              onClick={handleManualSave}
               className="w-full py-4 text-xs font-bold uppercase tracking-widest bg-emerald-600 text-white rounded-lg hover:bg-emerald-500 transition-all duration-300 shadow-[0_0_20px_rgba(5,150,105,0.3)]"
             >
-              Publish
+              {isNew ? "Create Track" : "Save Changes"}
             </button>
           </div>
         </div>

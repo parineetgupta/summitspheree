@@ -62,7 +62,7 @@ function CameraRig() {
 export default function HeroScene() {
   return (
     <div className="absolute inset-0 w-full h-full z-0 bg-[#050505]">
-      <Canvas shadows dpr={[1, 2]}>
+      <Canvas shadows dpr={[1, 1.5]}>
         <color attach="background" args={["#020203"]} />
         
         <Suspense fallback={null}>

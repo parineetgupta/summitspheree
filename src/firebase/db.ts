@@ -95,3 +95,23 @@ export const updateUserProfile = async (id: string, data: Partial<UserProfile>):
     updatedAt: Date.now()
   });
 };
+
+export const getUserIdByUsername = async (username: string): Promise<string | null> => {
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, where("username", "==", username.toLowerCase()));
+  const snapshot = await getDocs(q);
+  
+  if (!snapshot.empty) {
+    return snapshot.docs[0].id; // The document ID is the user UID
+  }
+  return null;
+};
+
+export const getUsernameByUserId = async (userId: string): Promise<string | null> => {
+  const docRef = doc(db, "users", userId);
+  const snapshot = await getDoc(docRef);
+  if (snapshot.exists() && snapshot.data().username) {
+    return snapshot.data().username;
+  }
+  return null;
+};

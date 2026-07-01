@@ -5,7 +5,7 @@ import { useAuth } from "@/features/auth/components/AuthProvider";
 import { getExpeditions, deleteExpedition } from "@/firebase/db";
 import { Expedition } from "@/types";
 import Link from "next/link";
-import { Map, Clock, Calendar, Edit2, Trash2, Plus, Flag } from "lucide-react";
+import { Map, Clock, Calendar, Edit2, Plus, Flag, Trash2 } from "lucide-react";
 
 export default function FutureTreks() {
   const { user } = useAuth();
@@ -25,7 +25,7 @@ export default function FutureTreks() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this plan?")) {
+    if (confirm("Are you sure you want to delete this planned expedition?")) {
       await deleteExpedition(id);
       loadData();
     }
@@ -51,7 +51,7 @@ export default function FutureTreks() {
           <p className="text-[10px] tracking-widest uppercase text-white/50">Plan your upcoming expeditions and track countdowns.</p>
         </div>
         <Link 
-          href="/admin/editor/new"
+          href="/admin/editor/new?status=future"
           className="flex items-center gap-2 bg-white hover:bg-white/90 text-black px-6 py-3 rounded-none font-bold text-[10px] tracking-widest uppercase transition-colors"
         >
           <Plus className="w-4 h-4" />

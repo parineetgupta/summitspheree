@@ -25,6 +25,9 @@ export interface Expedition {
   biggestChallenge?: string;
   bestPhotoId?: string;
   achievement?: string;
+  temperature?: string;
+  authorName?: string;
+  routeCheckpoints?: { title: string; subtitle: string }[];
   tags: string[];
   heroImage: string;
   media: ExpeditionMedia[];
@@ -32,9 +35,15 @@ export interface Expedition {
   visibility?: "public" | "private";
   
   // Future planning fields
-  difficulty?: string;
+  difficulty?: "Easy" | "Moderate" | "Hard" | "Extreme";
   priority?: "low" | "medium" | "high";
   checklist?: string;
+  
+  // Journey Metrics fields
+  region?: string;
+  country?: string;
+  endDate?: string;
+  trackType?: "Trek" | "Expedition" | "Climb" | "Journey" | "Exploration";
   
   createdAt: number;
   updatedAt: number;

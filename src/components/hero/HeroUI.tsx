@@ -4,25 +4,27 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { MoveRight } from "lucide-react";
 import { useHeroStore } from "./HeroStore";
+import { useRouter } from "next/navigation";
 
 export default function HeroUI() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   // Handle scroll-based fade out directly on the DOM node to prevent React re-renders
   useEffect(() => {
     const unsubscribe = useHeroStore.subscribe((state) => {
       if (containerRef.current) {
-        // Fade out entirely by 50% scroll
         const opacity = Math.max(0, 1 - state.scrollProgress * 2);
         containerRef.current.style.opacity = opacity.toString();
-        containerRef.current.style.transform = `translateY(-${state.scrollProgress * 100}px)`;
+        containerRef.current.style.transform = `translateY(-${state.scrollProgress * 150}px)`;
       }
     });
     return unsubscribe;
   }, []);
 
+  // Magnetic button effect
   useEffect(() => {
     const btn = buttonRef.current;
     const txt = textRef.current;
@@ -35,8 +37,8 @@ export default function HeroUI() {
       const y = e.clientY - rect.top - rect.height / 2;
 
       gsap.to(btn, {
-        x: x * 0.3,
-        y: y * 0.3,
+        x: x * 0.2,
+        y: y * 0.2,
         duration: 0.6,
         ease: "power2.out",
       });
@@ -72,66 +74,98 @@ export default function HeroUI() {
     };
   }, []);
 
-  // Initial animation
+  // Initial cinematic animation sequence
   useEffect(() => {
     if (containerRef.current) {
-      gsap.fromTo(
-        containerRef.current.children,
+      const tl = gsap.timeline({ delay: 0.2 });
+
+      tl.fromTo(
+        ".hero-element",
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power2.out",
+        }
+      ).fromTo(
+        ".hero-button",
         { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 1.5,
-          stagger: 0.2,
+          duration: 0.8,
           ease: "power3.out",
-          delay: 0.5,
-        }
+        },
+        "-=0.4"
       );
     }
   }, []);
 
   return (
-    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-4 text-center">
-      <div ref={containerRef} className="flex flex-col items-center transition-opacity duration-75">
+    // justify-center with pb-[10vh] perfectly centers the element slightly above true middle (~45% height)
+    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pb-[10vh] pointer-events-none px-4 text-center">
+      {/* 60% viewport width constraint */}
+      <div ref={containerRef} className="flex flex-col items-center w-full max-w-[60vw]">
+        
         {/* Main Title */}
-        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter uppercase mb-4 text-white drop-shadow-2xl opacity-0">
-          SummitSphere
+        <h1 
+          className="hero-element text-6xl md:text-8xl lg:text-[9rem] font-serif font-medium tracking-wide text-white drop-shadow-lg opacity-0"
+          style={{ marginBottom: '18px' }}
+        >
+          SUMMITSPHERE
         </h1>
         
         {/* Subtitle */}
-        <h2 className="text-xl md:text-3xl font-light tracking-[0.2em] uppercase mb-12 text-gray-200 opacity-0">
-          Every Summit Has a Story.
+        <h2 
+          className="hero-element text-xl md:text-3xl font-serif italic text-white/60 drop-shadow-md opacity-0"
+          style={{ marginBottom: '24px' }}
+        >
+          Every summit becomes a story.
         </h2>
         
-        {/* Supporting text */}
-        <div className="flex flex-col gap-2 mb-16 text-sm md:text-base font-light tracking-widest uppercase text-gray-400 opacity-0">
-          <p>Document every climb.</p>
-          <p>Relive every expedition.</p>
-          <p>Preserve every memory.</p>
-        </div>
+        {/* Description / Sub-Subtitle */}
+        <p
+          className="hero-element text-xs md:text-sm font-sans text-white/50 opacity-0"
+          style={{ marginBottom: '24px' }}
+        >
+          A private archive of mountains, memories and milestones.
+        </p>
 
-        {/* Button */}
-        <div className="opacity-0">
+        {/* Navigation / Chapters */}
+        <p 
+          className="hero-element text-[9px] md:text-[10px] tracking-[6px] uppercase font-semibold text-[#00D084] opacity-0"
+          style={{ marginBottom: '40px' }}
+        >
+          ✦ CHAPTERS &nbsp;•&nbsp; ATLAS &nbsp;•&nbsp; EXPEDITIONS &nbsp;•&nbsp; MEMORIES ✦
+        </p>
+
+        {/* Primary CTA Button */}
+        <div className="hero-button opacity-0">
           <button
             ref={buttonRef}
-            onClick={() => {
-              window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: "smooth"
-              });
-            }}
-            className="pointer-events-auto relative overflow-hidden group rounded-full border border-white/20 bg-white/5 backdrop-blur-md px-10 py-5 transition-colors hover:bg-white/10 hover:border-white/40"
+            onClick={() => router.push("/login")}
+            className="pointer-events-auto relative overflow-hidden group rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-12 py-5 transition-all duration-500 hover:bg-white/20 hover:border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:-translate-y-1"
           >
             <span
               ref={textRef}
-              className="relative z-10 flex items-center gap-3 text-sm tracking-[0.2em] uppercase font-bold text-white"
+              className="relative z-10 flex items-center gap-4 text-[11px] tracking-[0.2em] uppercase font-bold text-white transition-colors"
             >
-              Begin Expedition
-              <MoveRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
+              Begin Your Journey
+              <MoveRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-2" />
             </span>
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:animate-[shimmer_2s_infinite]" />
+            {/* Subtle inner shine */}
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-[#00D084]/20 to-transparent translate-x-[-100%] group-hover:animate-[shimmer_2s_infinite]" />
           </button>
         </div>
+
+        {/* Secondary Text Link */}
+        <div className="hero-button opacity-0 mt-8">
+          <a href="/journey" className="text-[10px] font-sans tracking-[0.2em] uppercase text-[#B8B8B8] hover:text-[#00D084] transition-colors border-b border-transparent hover:border-[#00D084] pb-1">
+            Explore Expeditions
+          </a>
+        </div>
+
       </div>
     </div>
   );

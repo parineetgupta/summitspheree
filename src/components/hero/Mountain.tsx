@@ -9,7 +9,7 @@ export default function Mountain() {
 
   // Generate procedural mountain geometry
   const geometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(100, 100, 128, 128);
+    const geo = new THREE.PlaneGeometry(100, 100, 64, 64);
     geo.rotateX(-Math.PI / 2);
 
     const positions = geo.attributes.position.array;
