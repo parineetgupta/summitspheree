@@ -105,36 +105,36 @@ export default function HeroUI() {
   return (
     // justify-center with pb-[10vh] perfectly centers the element slightly above true middle (~45% height)
     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pb-[10vh] pointer-events-none px-4 text-center">
-      {/* 90% viewport width constraint on mobile, 60% on desktop */}
-      <div ref={containerRef} className="flex flex-col items-center w-full max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw]">
-        
+      {/* 100% viewport width constraint on mobile, 60% on desktop */}
+      <div ref={containerRef} className="flex flex-col items-center w-full max-w-full sm:max-w-[90vw] md:max-w-[70vw] lg:max-w-[60vw]">
+
         {/* Main Title */}
-        <h1 
-          className="hero-element text-6xl md:text-8xl lg:text-[9rem] font-serif font-medium tracking-wide text-white drop-shadow-lg opacity-0"
+        <h1
+          className="hero-element text-[11vw] sm:text-6xl md:text-8xl lg:text-[9rem] font-serif font-medium tracking-wide text-white drop-shadow-lg opacity-0 leading-tight w-full"
           style={{ marginBottom: '18px' }}
         >
           SUMMITSPHERE
         </h1>
-        
+
         {/* Subtitle */}
-        <h2 
-          className="hero-element text-xl md:text-3xl font-serif italic text-white/60 drop-shadow-md opacity-0"
+        <h2
+          className="hero-element text-lg sm:text-xl md:text-3xl font-serif italic text-white/60 drop-shadow-md opacity-0"
           style={{ marginBottom: '24px' }}
         >
           Every summit becomes a story.
         </h2>
-        
+
         {/* Description / Sub-Subtitle */}
         <p
-          className="hero-element text-xs md:text-sm font-sans text-white/50 opacity-0"
+          className="hero-element text-[10px] sm:text-xs md:text-sm font-sans text-white/50 opacity-0 px-4"
           style={{ marginBottom: '24px' }}
         >
           A private archive of mountains, memories and milestones.
         </p>
 
         {/* Navigation / Chapters */}
-        <p 
-          className="hero-element text-[9px] md:text-[10px] tracking-[6px] uppercase font-semibold text-[#00D084] opacity-0"
+        <p
+          className="hero-element text-[8px] sm:text-[9px] md:text-[10px] tracking-[3px] md:tracking-[6px] uppercase font-semibold text-[#00D084] opacity-0 flex flex-wrap justify-center gap-y-2 px-2"
           style={{ marginBottom: '40px' }}
         >
           ✦ CHAPTERS &nbsp;•&nbsp; ATLAS &nbsp;•&nbsp; EXPEDITIONS &nbsp;•&nbsp; MEMORIES ✦
