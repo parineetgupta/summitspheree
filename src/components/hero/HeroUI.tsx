@@ -141,7 +141,7 @@ export default function HeroUI() {
         </p>
 
         {/* Primary CTA Button */}
-        <div className="hero-button opacity-0">
+        <div className="hero-button opacity-0 mt-8">
           <button
             ref={buttonRef}
             onClick={() => router.push("/login")}
